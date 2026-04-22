@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hana Čápová</title>
+  <link rel="icon" href="images/logo/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #f5f2ec;
+      --ink: #1a1a1a;
+      --muted: #6b6560;
+      --blue: #2d5a7b;
+      --accent: #b8a98a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      font-weight: 300;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 3rem;
+      background: rgba(245, 242, 236, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(184,169,138,0.2);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--blue);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--blue); }
+
+    .nav-instagram a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      transition: color 0.2s;
+    }
+    .nav-instagram a:hover { color: var(--blue); }
+
+    /* PAGES */
+    .page { display: none; padding-top: 5rem; min-height: 100vh; }
+    .page.active { display: block; }
+
+    /* ── DÍLO ── */
+    #page-dilo { padding-top: 5rem; }
+
+    .gallery-grid {
+      columns: 3;
+      column-gap: 6px;
+      padding: 6px;
+    }
+
+    @media (max-width: 900px) { .gallery-grid { columns: 2; } }
+    @media (max-width: 500px) { .gallery-grid { columns: 1; } }
+
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: 6px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      display: block;
+      transition: transform 0.4s ease, opacity 0.3s;
+      opacity: 0;
+    }
+
+    .gallery-item img.loaded { opacity: 1; }
+    .gallery-item:hover img { transform: scale(1.02); }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(20,18,15,0.95);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox.open { display: flex; }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 2px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 1.5rem; right: 2rem;
+      font-size: 2rem;
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      background: none;
+      border: none;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    .lightbox-close:hover { color: #fff; }
+
+    .lightbox-prev, .lightbox-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.5);
+      font-size: 2.5rem;
+      cursor: pointer;
+      padding: 1rem;
+      transition: color 0.2s;
+      line-height: 1;
+    }
+    .lightbox-prev:hover, .lightbox-next:hover { color: #fff; }
+    .lightbox-prev { left: 1rem; }
+    .lightbox-next { right: 1rem; }
+
+    /* ── BIO ── */
+    #page-bio {
+      display: none;
+      min-height: 100vh;
+      padding-top: 5rem;
+    }
+    #page-bio.active { display: flex; align-items: center; justify-content: center; }
+
+    .bio-inner {
+      max-width: 600px;
+      width: 100%;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .bio-portrait {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: top;
+      margin-bottom: 2rem;
+      filter: grayscale(100%);
+      border: 1px solid var(--accent);
+    }
+
+    .bio-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--blue);
+      margin-bottom: 2rem;
+      letter-spacing: 0.02em;
+    }
+
+    .bio-text {
+      font-size: 0.9rem;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+
+    .bio-text p { margin-bottom: 1rem; }
+    .bio-text p:last-child { margin-bottom: 0; }
+
+    /* ── KDE KOUPIT ── */
+    #page-kde {
+      display: none;
+      min-height: 100vh;
+      padding-top: 5rem;
+    }
+    #page-kde.active { display: flex; flex-direction: column; align-items: center; }
+
+    .kde-inner {
+      max-width: 900px;
+      width: 100%;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .kde-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      color: var(--blue);
+      margin-bottom: 0.5rem;
+      font-weight: 400;
+    }
+
+    .kde-divider {
+      width: 2rem;
+      height: 1px;
+      background: var(--accent);
+      margin: 0 auto 3rem;
+    }
+
+    .kde-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 600px) { .kde-grid { grid-template-columns: 1fr; } }
+
+    .kde-card {
+      background: #fff;
+      border: 1px solid rgba(184,169,138,0.25);
+      padding: 2rem 1.5rem;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .kde-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    }
+
+    .kde-card img {
+      max-width: 160px;
+      max-height: 80px;
+      object-fit: contain;
+    }
+
+    .kde-card span {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo" onclick="showPage('dilo')">Hana Čápová</a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('dilo')">Dílo</a></li>
+    <li><a href="#" onclick="showPage('bio')">Bio</a></li>
+    <li><a href="#" onclick="showPage('kde')">Kde koupit</a></li>
+  </ul>
+  <div class="nav-instagram">
+    <a href="https://www.instagram.com/hanacapova_/" target="_blank" rel="noopener">Instagram</a>
+  </div>
+</nav>
+
+<!-- DÍLO -->
+<div id="page-dilo" class="page active">
+  <div class="gallery-grid" id="gallery"></div>
+  <footer>©2022 Hana Čápová</footer>
+</div>
+
+<!-- BIO -->
+<div id="page-bio" class="page">
+  <div class="bio-inner">
+    <img src="images/Hana_Capova.jpeg" alt="Hana Čápová" class="bio-portrait">
+    <h1 class="bio-name">akad. mal. Hana Čápová</h1>
+    <div class="bio-text">
+      <p>Hana Čápová se narodila 24. dubna 1956 v Praze.</p>
+      <p>V letech 1971–1975 studovala Střední odbornou výtvarnou školu V. Hollara v Praze (prof. J. Hořánek) a v letech 1977–1983 Vysokou školu uměleckoprůmyslovou v Praze (ateliér ilustrace a grafiky, prof. J. Mikula).</p>
+      <p>Byla členkou prestižního SČUG HOLLAR. Její práce obdivují návštěvníci v České republice i mimo ni, např. na Slovensku, v Polsku, Rusku, Litvě, Německu, Švýcarsku, Belgii, Nizozemsku, Anglii, Francii, Itálii, Španělsku, Portugalsku, Turecku, Koreji, USA, Japonsku, Mexiku nebo Číně. Za svou práci získala řadu významných mezinárodních ocenění.</p>
+      <p>Hana Čápová zemřela 11. května 2019 v Praze.</p>
+    </div>
+  </div>
+  <footer>©2022 Hana Čápová</footer>
+</div>
+
+<!-- KDE KOUPIT -->
+<div id="page-kde" class="page">
+  <div class="kde-inner">
+    <h1 class="kde-title">Kde koupit?</h1>
+    <div class="kde-divider"></div>
+    <div class="kde-grid">
+      <a class="kde-card" href="https://www.hollar.cz" target="_blank" rel="noopener">
+        <img src="images/soubory/download.png" alt="Galerie Hollar">
+        <span>Galerie Hollar</span>
+      </a>
+      <a class="kde-card" href="https://www.kabinetgrafiky.cz" target="_blank" rel="noopener">
+        <img src="images/soubory/g00112.jpeg" alt="Kabinet České Grafiky">
+        <span>Kabinet České Grafiky</span>
+      </a>
+      <a class="kde-card" href="https://www.galerieIkaros.cz" target="_blank" rel="noopener">
+        <img src="images/soubory/g00350.jpeg" alt="Galerie Ikaros">
+        <span>Galerie Ikaros</span>
+      </a>
+    </div>
+  </div>
+  <footer>©2022 Hana Čápová</footer>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  <button class="lightbox-prev" onclick="lightboxNav(-1)">&#8249;</button>
+  <img id="lightbox-img" src="" alt="">
+  <button class="lightbox-next" onclick="lightboxNav(1)">&#8250;</button>
+</div>
+
+<script>
+const images = [
+  'images/gallery/A030_L.jpeg','images/gallery/A031_L.jpeg','images/gallery/A032_L.jpeg',
+  'images/gallery/A033_L.jpeg','images/gallery/A034_L.jpeg','images/gallery/A035_L.jpeg',
+  'images/gallery/A036_L.jpeg','images/gallery/A037_L.jpeg','images/gallery/A038_L.jpeg',
+  'images/gallery/A039_L.jpeg','images/gallery/A040_L.jpeg','images/gallery/A041_L.jpeg',
+  'images/gallery/A042_L.jpeg','images/gallery/A043_L.jpeg','images/gallery/A044_L.jpeg',
+  'images/gallery/A045_L.jpeg','images/gallery/A046_L.jpeg','images/gallery/A047_L.jpeg',
+  'images/gallery/A048_L.jpeg','images/gallery/A049_L.jpeg','images/gallery/A050_L.jpeg',
+  'images/gallery/A051_L.jpeg','images/gallery/A052_L.jpeg','images/gallery/A053_L.jpeg',
+  'images/gallery/A054_L.jpeg','images/gallery/A055_L.jpeg','images/gallery/A056_L.jpeg',
+  'images/gallery/A057_L.jpeg','images/gallery/A058_L.jpeg','images/gallery/A059_L.jpeg',
+  'images/gallery/A060_L.jpeg','images/gallery/A061_L.jpeg','images/gallery/A062_L.jpeg',
+  'images/gallery/A063_L.jpeg','images/gallery/A064_L.jpeg','images/gallery/A065_L.jpeg',
+  'images/gallery/A066_L.jpeg','images/gallery/A067_L.jpeg','images/gallery/A068_L.jpeg',
+  'images/gallery/A069_L.jpeg','images/gallery/A070_L.jpeg','images/gallery/A071_L.jpeg',
+  'images/gallery/A072_L.jpeg','images/gallery/A073_L.jpeg','images/gallery/A074_L.jpeg',
+  'images/gallery/A075_L.jpeg','images/gallery/A076_L.jpeg','images/gallery/A077_L.jpeg',
+  'images/gallery/A078_L.jpeg','images/gallery/A079_L.jpeg'
+];
+
+// Build gallery
+const grid = document.getElementById('gallery');
+images.forEach((src, i) => {
+  const div = document.createElement('div');
+  div.className = 'gallery-item';
+  const img = document.createElement('img');
+  img.loading = 'lazy';
+  img.src = src;
+  img.alt = '';
+  img.onload = () => img.classList.add('loaded');
+  img.onclick = () => openLightbox(i);
+  div.appendChild(img);
+  grid.appendChild(div);
+});
+
+// Page switching
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  window.scrollTo(0, 0);
+  return false;
+}
+
+// Lightbox
+let currentIndex = 0;
+function openLightbox(i) {
+  currentIndex = i;
+  document.getElementById('lightbox-img').src = images[i];
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function lightboxNav(dir) {
+  currentIndex = (currentIndex + dir + images.length) % images.length;
+  document.getElementById('lightbox-img').src = images[currentIndex];
+}
+document.getElementById('lightbox').addEventListener('click', function(e) {
+  if (e.target === this) closeLightbox();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') lightboxNav(-1);
+  if (e.key === 'ArrowRight') lightboxNav(1);
+});
+</script>
+</body>
+</html>

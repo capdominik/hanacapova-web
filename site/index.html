@@ -28,7 +28,6 @@
       font-weight: 300;
     }
 
-    /* NAV */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -49,6 +48,7 @@
       color: var(--blue);
       text-decoration: none;
       letter-spacing: 0.02em;
+      cursor: pointer;
     }
 
     .nav-links {
@@ -66,9 +66,16 @@
       color: var(--muted);
       text-decoration: none;
       transition: color 0.2s;
+      cursor: pointer;
     }
 
     .nav-links a:hover { color: var(--blue); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
 
     .nav-instagram a {
       color: var(--muted);
@@ -79,11 +86,32 @@
     }
     .nav-instagram a:hover { color: var(--blue); }
 
-    /* PAGES */
+    .lang-switch {
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+    }
+    .lang-btn {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.2s;
+    }
+    .lang-btn.active { color: var(--blue); font-weight: 400; }
+    .lang-btn:hover { color: var(--blue); }
+    .lang-sep { color: var(--accent); font-size: 0.7rem; line-height: 1; }
+
     .page { display: none; padding-top: 5rem; min-height: 100vh; }
     .page.active { display: block; }
 
-    /* ── DÍLO ── */
+    /* DÍLO */
     #page-dilo { padding-top: 5rem; }
 
     .gallery-grid {
@@ -108,7 +136,6 @@
       transition: transform 0.4s ease, opacity 0.3s;
       opacity: 0;
     }
-
     .gallery-item img.loaded { opacity: 1; }
     .gallery-item:hover img { transform: scale(1.02); }
 
@@ -123,14 +150,11 @@
       justify-content: center;
     }
     .lightbox.open { display: flex; }
-
     .lightbox img {
       max-width: 90vw;
       max-height: 90vh;
       object-fit: contain;
-      border-radius: 2px;
     }
-
     .lightbox-close {
       position: absolute;
       top: 1.5rem; right: 2rem;
@@ -143,7 +167,6 @@
       transition: color 0.2s;
     }
     .lightbox-close:hover { color: #fff; }
-
     .lightbox-prev, .lightbox-next {
       position: absolute;
       top: 50%;
@@ -161,13 +184,9 @@
     .lightbox-prev { left: 1rem; }
     .lightbox-next { right: 1rem; }
 
-    /* ── BIO ── */
-    #page-bio {
-      display: none;
-      min-height: 100vh;
-      padding-top: 5rem;
-    }
-    #page-bio.active { display: flex; align-items: center; justify-content: center; }
+    /* BIO */
+    #page-bio { display: none; min-height: 100vh; padding-top: 5rem; }
+    #page-bio.active { display: flex; align-items: center; justify-content: center; flex-direction: column; }
 
     .bio-inner {
       max-width: 600px;
@@ -175,7 +194,6 @@
       padding: 4rem 2rem;
       text-align: center;
     }
-
     .bio-portrait {
       width: 140px;
       height: 140px;
@@ -186,7 +204,6 @@
       filter: grayscale(100%);
       border: 1px solid var(--accent);
     }
-
     .bio-name {
       font-family: 'Cormorant Garamond', serif;
       font-size: 2rem;
@@ -195,22 +212,16 @@
       margin-bottom: 2rem;
       letter-spacing: 0.02em;
     }
-
     .bio-text {
       font-size: 0.9rem;
       line-height: 1.9;
       color: var(--muted);
     }
-
     .bio-text p { margin-bottom: 1rem; }
     .bio-text p:last-child { margin-bottom: 0; }
 
-    /* ── KDE KOUPIT ── */
-    #page-kde {
-      display: none;
-      min-height: 100vh;
-      padding-top: 5rem;
-    }
+    /* KDE KOUPIT */
+    #page-kde { display: none; min-height: 100vh; padding-top: 5rem; }
     #page-kde.active { display: flex; flex-direction: column; align-items: center; }
 
     .kde-inner {
@@ -219,7 +230,6 @@
       padding: 4rem 2rem;
       text-align: center;
     }
-
     .kde-title {
       font-family: 'Cormorant Garamond', serif;
       font-size: 2.2rem;
@@ -227,20 +237,17 @@
       margin-bottom: 0.5rem;
       font-weight: 400;
     }
-
     .kde-divider {
       width: 2rem;
       height: 1px;
       background: var(--accent);
       margin: 0 auto 3rem;
     }
-
     .kde-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1.5rem;
     }
-
     @media (max-width: 600px) { .kde-grid { grid-template-columns: 1fr; } }
 
     .kde-card {
@@ -254,18 +261,15 @@
       gap: 1.2rem;
       transition: transform 0.25s, box-shadow 0.25s;
     }
-
     .kde-card:hover {
       transform: translateY(-4px);
       box-shadow: 0 12px 30px rgba(0,0,0,0.08);
     }
-
     .kde-card img {
       max-width: 160px;
       max-height: 80px;
       object-fit: contain;
     }
-
     .kde-card span {
       font-size: 0.75rem;
       letter-spacing: 0.1em;
@@ -273,7 +277,6 @@
       color: var(--muted);
     }
 
-    /* FOOTER */
     footer {
       text-align: center;
       padding: 2rem;
@@ -286,14 +289,21 @@
 <body>
 
 <nav>
-  <a href="#" class="nav-logo" onclick="showPage('dilo')">Hana Čápová</a>
+  <span class="nav-logo" onclick="showPage('dilo')">Hana Čápová</span>
   <ul class="nav-links">
-    <li><a href="#" onclick="showPage('dilo')">Dílo</a></li>
-    <li><a href="#" onclick="showPage('bio')">Bio</a></li>
-    <li><a href="#" onclick="showPage('kde')">Kde koupit</a></li>
+    <li><a onclick="showPage('dilo')" data-cs="Dílo" data-en="Work">Dílo</a></li>
+    <li><a onclick="showPage('bio')">Bio</a></li>
+    <li><a onclick="showPage('kde')" data-cs="Kde koupit" data-en="Where to buy">Kde koupit</a></li>
   </ul>
-  <div class="nav-instagram">
-    <a href="https://www.instagram.com/hanacapova_/" target="_blank" rel="noopener">Instagram</a>
+  <div class="nav-right">
+    <div class="nav-instagram">
+      <a href="https://www.instagram.com/hanacapova_/" target="_blank" rel="noopener">Instagram</a>
+    </div>
+    <div class="lang-switch">
+      <button class="lang-btn active" onclick="setLang('cs')">CZ</button>
+      <span class="lang-sep">|</span>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
   </div>
 </nav>
 
@@ -308,12 +318,7 @@
   <div class="bio-inner">
     <img src="images/Hana_Capova.jpeg" alt="Hana Čápová" class="bio-portrait">
     <h1 class="bio-name">akad. mal. Hana Čápová</h1>
-    <div class="bio-text">
-      <p>Hana Čápová se narodila 24. dubna 1956 v Praze.</p>
-      <p>V letech 1971–1975 studovala Střední odbornou výtvarnou školu V. Hollara v Praze (prof. J. Hořánek) a v letech 1977–1983 Vysokou školu uměleckoprůmyslovou v Praze (ateliér ilustrace a grafiky, prof. J. Mikula).</p>
-      <p>Byla členkou prestižního SČUG HOLLAR. Její práce obdivují návštěvníci v České republice i mimo ni, např. na Slovensku, v Polsku, Rusku, Litvě, Německu, Švýcarsku, Belgii, Nizozemsku, Anglii, Francii, Itálii, Španělsku, Portugalsku, Turecku, Koreji, USA, Japonsku, Mexiku nebo Číně. Za svou práci získala řadu významných mezinárodních ocenění.</p>
-      <p>Hana Čápová zemřela 11. května 2019 v Praze.</p>
-    </div>
+    <div class="bio-text" id="bio-text"></div>
   </div>
   <footer>©2022 Hana Čápová</footer>
 </div>
@@ -321,7 +326,7 @@
 <!-- KDE KOUPIT -->
 <div id="page-kde" class="page">
   <div class="kde-inner">
-    <h1 class="kde-title">Kde koupit?</h1>
+    <h1 class="kde-title" id="kde-title">Kde koupit?</h1>
     <div class="kde-divider"></div>
     <div class="kde-grid">
       <a class="kde-card" href="https://www.hollar.cz" target="_blank" rel="noopener">
@@ -370,6 +375,47 @@ const images = [
   'images/gallery/A078_L.jpeg','images/gallery/A079_L.jpeg'
 ];
 
+const translations = {
+  cs: {
+    bio: `
+      <p>Hana Čápová se narodila 24. dubna 1956 v Praze.</p>
+      <p>V letech 1971–1975 studovala Střední odbornou výtvarnou školu V. Hollara v Praze (prof. J. Hořánek) a v letech 1977–1983 Vysokou školu uměleckoprůmyslovou v Praze (ateliér ilustrace a grafiky, prof. J. Mikula).</p>
+      <p>Byla členkou prestižního SČUG HOLLAR. Její práce obdivují návštěvníci v České republice i mimo ni, např. na Slovensku, v Polsku, Rusku, Litvě, Německu, Švýcarsku, Belgii, Nizozemsku, Anglii, Francii, Itálii, Španělsku, Portugalsku, Turecku, Koreji, USA, Japonsku, Mexiku nebo Číně. Za svou práci získala řadu významných mezinárodních ocenění.</p>
+      <p>Hana Čápová zemřela 11. května 2019 v Praze.</p>
+    `,
+    kdeTitle: 'Kde koupit?',
+    navWork: 'Dílo',
+    navWhere: 'Kde koupit',
+  },
+  en: {
+    bio: `
+      <p>Hana Čápová was born on April 24, 1956 in Prague.</p>
+      <p>Between 1971 and 1975 she studied at the Secondary School of Fine Arts V. Hollar in Prague (prof. J. Hořánek), and from 1977 to 1983 at the Academy of Arts, Architecture and Design in Prague (illustration and graphic arts studio, prof. J. Mikula).</p>
+      <p>She was a member of the prestigious SČUG HOLLAR association. Her work has been admired by visitors in the Czech Republic and abroad — in Slovakia, Poland, Russia, Lithuania, Germany, Switzerland, Belgium, the Netherlands, England, France, Italy, Spain, Portugal, Turkey, Korea, the USA, Japan, Mexico and China. She received numerous international awards throughout her career.</p>
+      <p>Hana Čápová passed away on May 11, 2019 in Prague.</p>
+    `,
+    kdeTitle: 'Where to buy?',
+    navWork: 'Work',
+    navWhere: 'Where to buy',
+  }
+};
+
+let currentLang = 'cs';
+
+function setLang(lang) {
+  currentLang = lang;
+  const t = translations[lang];
+  document.getElementById('bio-text').innerHTML = t.bio;
+  document.getElementById('kde-title').textContent = t.kdeTitle;
+  document.querySelectorAll('.nav-links a[data-cs]').forEach(a => {
+    a.textContent = lang === 'cs' ? a.dataset.cs : a.dataset.en;
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.toLowerCase() === lang);
+  });
+  document.documentElement.lang = lang;
+}
+
 // Build gallery
 const grid = document.getElementById('gallery');
 images.forEach((src, i) => {
@@ -385,15 +431,15 @@ images.forEach((src, i) => {
   grid.appendChild(div);
 });
 
-// Page switching
+// Init lang
+setLang('cs');
+
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
   window.scrollTo(0, 0);
-  return false;
 }
 
-// Lightbox
 let currentIndex = 0;
 function openLightbox(i) {
   currentIndex = i;
